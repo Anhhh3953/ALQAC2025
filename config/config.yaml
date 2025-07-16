@@ -1,0 +1,23 @@
+# All file paths
+filepaths:
+  law_corpus: "data/alqac25_law.json"
+  train_set: "data/alqac25_train.json"
+  test_set: "data/alqac25_private_test_Task_1.json"
+  stopwords: "data/stopwords.txt"
+  submission_file: "submission.json"
+  log_file: "logs/pipeline.log"
+
+# Logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# Parameters
+retrieval_params:
+  # Number of candidates from each retriever
+  bm25_top_k: 100
+  sematic_top_k: 100
+  # Final candidates after re-rank
+  final_top_n: 5
+
+  bm25_model_path: "models/bm25/bm25_retrieverr.pkl"
