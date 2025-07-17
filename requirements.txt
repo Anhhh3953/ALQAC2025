@@ -1,7 +1,36 @@
-pandas
-matplotlib
-seaborn
-pyyaml
-rank-bm25
-tqdm
-scikit-learn
+Package               Version
+--------------------- --------
+aiofiles              24.1.0
+aiosqlite             0.21.0
+clickhouse-connect    0.8.17
+cloudscraper          1.2.71
+cookiecutter          2.6.0
+cssselect             1.2.0
+dask                  2024.5.0
+fake-useragent        2.0.3
+fqdn                  1.5.1
+isoduration           20.11.0
+jsonpointer           3.0.0
+jupyter               1.1.1
+kaggle                1.7.4.5
+litellm               1.61.8
+lxml                  5.3.1
+mitmproxy             11.1.3
+nbqa                  1.9.1
+nltk                  3.9.1
+pipdeptree            2.27.0
+pipenv                2024.4.1
+pylint                3.3.4
+PySocks               1.7.1
+pyspark               3.5.5
+pytest                8.3.5
+rank-bm25             0.2.2
+scikit-learn          1.6.1
+seaborn               0.13.2
+selenium              4.28.0
+snowballstemmer       2.2.0
+tf-playwright-stealth 1.1.1
+tinycss2              1.4.0
+uri-template          1.3.0
+webcolors             24.11.1
+xxhash                3.5.0

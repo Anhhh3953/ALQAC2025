@@ -1,49 +1,59 @@
+# src/preprocessor.py
+
 import re
 import logging
 from pyvi import ViTokenizer
 
 class TextPreprocessor:
-    def __init__(self, stopwords):
-        self.stopwords = stopwords
-        self.punctuation_re = re.compile(r'[^\w\s]')
-        logging.infoo('TextPreprocessor initialized')
-
-    def _load_stopwords(self, path):
-        try:
-            with open(path, 'r', encoding='utf-8') as f:
-                stopwords = {line.strip() for line in f if line.strip()}
-            logging.info(f"Successfully loaded {len(stopwords)} stopwords.")
-            return stopwords
-        except FileNotFoundError:
-            logging.warning(f"Stopwords file not found at {path}. Proceeding with an empty set.")
-            return set()   
-    
-    def process(self, text):
+    """
+    Đóng gói các bước tiền xử lý văn bản: chuẩn hóa, tách từ, và loại bỏ stopword.
+    """
+    def __init__(self, stopwords: set = None):
         """
-        Applies the full preprocessing pipeline to a given text.
-
-        The steps are:
-        1. Convert to lowercase.
-        2. Remove punctuation.
-        3. Tokenize using PyVi for Vietnamese word segmentation.
-        4. Remove stopwords and short tokens.
+        Khởi tạo Preprocessor.
+        :param stopwords: Một set các từ dừng đã được load từ bên ngoài.
         """
-        # 1. Lowercase
-        text = text.lower()
+        # Dependency Injection: Nhận stopwords từ bên ngoài, không tự đọc file.
+        self.stopwords = stopwords if stopwords else set()
         
-        # 2. Remove newlines and extra spaces
-        text = re.sub(r'\s+', ' ', text)
-        text = text.strip()
+        # Regex để loại bỏ tất cả các ký tự không phải là chữ, số, hoặc dấu gạch dưới
+        # Giữ lại dấu gạch dưới vì pyvi sử dụng nó để nối các từ ghép.
+        self.punctuation_re = re.compile(r'[^\w\s_]')
         
-        # 3. Remove punctuation
-        text = self.punctuation_re.sub(' ', text)
+        logging.info(f"TextPreprocessor initialized with {len(self.stopwords)} stopwords.")
+
+    def process(self, text: str) -> list[str]:
+        """
+        Áp dụng toàn bộ pipeline tiền xử lý cho một đoạn văn bản.
+
+        Các bước bao gồm:
+        1. Chuyển thành chữ thường.
+        2. Tách từ bằng PyVi.
+        3. Loại bỏ các ký tự đặc biệt không cần thiết.
+        4. Loại bỏ stopword và các token ngắn.
+        5. Chuẩn hóa khoảng trắng.
+        """
+        if not isinstance(text, str):
+            return []
+
+        # 1. Chuyển thành chữ thường và tách từ
+        # Kết quả: "luật phòng_chống ma_túy" -> "luật phòng_chống ma_túy"
+        tokenized_text = ViTokenizer.tokenize(text.lower())
         
-        # 4. Tokenize with pyvi
-        tokenized_text = ViTokenizer.tokenize(text)
+        # 2. Loại bỏ các dấu câu không mong muốn
+        # Giữ lại chữ, số và dấu gạch dưới
+        # Kết quả: "luật phòng_chống, ma_túy." -> "luật phòng_chống ma_túy"
+        cleaned_text = self.punctuation_re.sub(' ', tokenized_text)
+
+        # 3. Tách chuỗi thành các token và loại bỏ stopword
+        # Kết quả: "luật phòng_chống ma_túy" -> ['luật', 'phòng_chống', 'ma_túy']
+        tokens = cleaned_text.split()
         
-        # 5. Eliminate stopwords
-        tokens = tokenized_text.split()
-        tokens = [token for token in tokenized_text if token not in self.stopwords and len(token) > 1]
-        return tokens
-    
+        # Lọc stopwords và các token quá ngắn (thường là nhiễu do regex)
+        # Sử dụng set stopwords để tra cứu nhanh hơn (O(1))
+        filtered_tokens = [
+            token for token in tokens 
+            if token not in self.stopwords and len(token) > 1
+        ]
         
+        return filtered_tokens

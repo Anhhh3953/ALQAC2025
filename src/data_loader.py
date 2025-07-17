@@ -1,23 +1,22 @@
+# src/data_loader.py
 import json
 import logging
+import pandas as pd
 
 class DataLoader:
-    """
-    Handle loading all necessay data files for the project
-    """
-    def __init__(self, config):
-        self.paths = config['filepaths']
-        logging.info("DataLoader initialized")
+    """Xử lý việc tải tất cả các file dữ liệu cần thiết cho dự án."""
+    def __init__(self, config: dict):
+        self.paths = config['paths'] 
+        logging.info("DataLoader initialized.")
     
-    def load_law_corpus(self):
+    def load_law_corpus(self) -> list[dict]:
         """
-        Loads and flatterns the law corpus from JSON file
-        
-        Returns:
-            A list of articles dictionaries, each of which contains law_id, article_id, and text
+        Tải và làm phẳng kho luật từ file JSON.
+        Trả về một list các dictionary, mỗi dict chứa law_id, article_id, và text.
         """
-        logging.info(f'Loading law corrpus forn {self.paths['law_corpus']}')
-        with open(self.path['law_corpus'], 'r', encoding='utf-7=8') as f:
+        file_path = self.paths['law_corpus']
+        logging.info(f'Loading law corpus from {file_path}')
+        with open(file_path, 'r', encoding='utf-8') as f: # Sửa lỗi encoding
             raw_data = json.load(f)
         
         articles = []
@@ -28,29 +27,33 @@ class DataLoader:
                     "article_id": article['id'],
                     'text': article['text']
                 })
-        logging.info(f"Successfully loaded {len(articles)} articles")
+        logging.info(f"Successfully loaded {len(articles)} articles.")
         return articles
-    
-    def load_data(self, data_name):
+
+    def load_questions(self, data_name: str) -> list[dict]:
         """
-        Load the training question data
-        Returns:
-            list: A list of training question dictionaries
+        Tải dữ liệu câu hỏi (train hoặc test).
+        :param data_name: key của file trong config, ví dụ 'train_data' hoặc 'test_data'.
         """
-        logging.info(f"Loading data from {self.paths['data_name']}")
-        with open(self.path['data_name'], 'r', encoding='utf-8') as f:
+        file_path = self.paths[data_name]
+        logging.info(f"Loading data from {file_path}")
+        with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        logging.info(f'Successfully loaded {len(data)} questions')
+        logging.info(f'Successfully loaded {len(data)} questions.')
         return data
     
-    def load_stopwords(self):
-        logging.info(f"Loading stopwords from: {self.paths['stopwords']}")
+    def load_stopwords(self) -> set:
+        """Tải stopwords từ file."""
+        file_path = self.paths.get('stopwords') # Dùng .get() để tránh lỗi nếu không có
+        if not file_path:
+            return set()
+
+        logging.info(f"Loading stopwords from: {file_path}")
         try:
-            with open(self.path['stopwords'], 'r', encoding='utf-8') as f:
+            with open(file_path, 'r', encoding='utf-8') as f:
                 stopwords = {line.strip() for line in f if line.strip()}
-            logging.info(f"Successfully loaded {len(stopwords)} stopwords")
+            logging.info(f"Successfully loaded {len(stopwords)} stopwords.")
             return stopwords
         except FileNotFoundError:
-            logging.warning(f"Could not find stopwords in file {self.paths['stopwords']}")
+            logging.warning(f"Could not find stopwords file at {file_path}")
             return set()
-            

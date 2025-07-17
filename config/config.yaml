@@ -1,23 +1,59 @@
-# All file paths
-filepaths:
+# 1. FILE PATHS
+paths:
+  # Input data
   law_corpus: "data/alqac25_law.json"
-  train_set: "data/alqac25_train.json"
-  test_set: "data/alqac25_private_test_Task_1.json"
+  train_data: "data/alqac25_train.json"
+  test_data: "data/alqac25_private_test.json" # Sửa tên file test cho đúng
   stopwords: "data/stopwords.txt"
-  submission_file: "submission.json"
-  log_file: "logs/pipeline.log"
+  
+  # Artifacts (các model/chỉ mục đã được build)
+  artifacts_dir: "models/"
+  bm25_model: "models/bm25_retriever.pkl"
+  semantic_model: "models/semantic_retriever"
+  reranker_model: "models/reranker-finetuned"
 
-# Logging
+  # Output
+  output_dir: "output/"
+  log_file: "logs/app.log"
+
+# 2. MODEL CONFIGURATIONS
+models:
+  bi_encoder: "huyydangg/DEk21_hcmute_embedding"
+  cross_encoder: "vinai/phobert-base"
+
+# 3. PIPELINE PARAMETERS
+# Các siêu tham số cho quá trình retrieval và ranking
+pipeline_params:
+  # Số lượng ứng viên lấy ra từ mỗi retriever ban đầu
+  retrieval_top_k: 100
+  
+  # Số lượng ứng viên tốt nhất sau khi fusion để đưa vào Re-ranker
+  rerank_top_k: 50
+  
+  # Ngưỡng cuối cùng sẽ được định nghĩa trong submission_profiles
+  # final_top_n: 5 # Không cần ở đây nữa
+
+
+# 4. LOGGING CONFIGURATION
 logging:
   level: "INFO"
-  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  format: "%(asctime)s [%(levelname)s] - %(name)s - %(message)s"
 
-# Parameters
-retrieval_params:
-  # Number of candidates from each retriever
-  bm25_top_k: 100
-  sematic_top_k: 100
-  # Final candidates after re-rank
-  final_top_n: 5
+# 5. SUBMISSION PROFILES
+# Cho phép tạo nhiều file submission với các cài đặt khác nhau
+submission_profiles:
+  hybrid_optimal:
+    method: "hybrid"
+    threshold: 1 # Cập nhật sau khi chạy evaluate.py
+    output_file: "output/submission_hybrid_t1.json"
+    
+  rerank_optimal:
+    method: "rerank"
+    threshold: 1 # Cập nhật sau khi chạy evaluate.py
+    output_file: "output/submission_rerank_t1.json"
+    
+  rerank_recall:
+    method: "rerank"
+    threshold: 3 # Cập nhật sau khi chạy evaluate.py
+    output_file: "output/submission_rerank_t3.json"
 
-  bm25_model_path: "models/bm25/bm25_retrieverr.pkl"
