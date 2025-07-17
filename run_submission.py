@@ -19,19 +19,22 @@ def setup_logging(config):
     """Cấu hình logging dựa trên file config."""
     log_config = config.get('logging', {})
     log_file = config.get('paths', {}).get('log_file')
-    # Tạo thư mục logs nếu chưa có
-    if log_file:
-        os.makedirs(os.path.dirname(log_file), exist_ok=True)
-        
+    
     handlers = [logging.StreamHandler()] # Luôn in ra console
+    
     if log_file:
-        handlers.append(logging.FileHandler(log_file))
+        log_dir = os.path.dirname(log_file)
+        os.makedirs(log_dir, exist_ok=True)
+        
+        file_handler = logging.FileHandler(log_file, encoding='utf-8')
+        handlers.append(file_handler)
         
     logging.basicConfig(
         level=log_config.get('level', 'INFO'),
-        format=log_config.get('format', '%(asctime)s - %(levelname)s - %(message)s'),
+        format=log_config.get('format', '%(asctime)s [%(levelname)s] - %(name)s - %(message)s'),
         handlers=handlers
     )
+
 
 def main(args):
     """Hàm chính để chạy pipeline và tạo file submission."""

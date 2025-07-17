@@ -3,7 +3,7 @@ import logging
 import pickle
 import numpy as np
 from pathlib import Path
-from rank_bm25 import BM25Okapi  # Sửa lỗi chính tả
+from rank_bm25 import BM25Okapi  
 from tqdm import tqdm
 
 class BM25Retriever:

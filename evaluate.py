@@ -29,7 +29,8 @@ def setup_logging(config):
         os.makedirs(log_dir, exist_ok=True)
         
         # Thêm FileHandler
-        handlers.append(logging.FileHandler(log_file))
+        file_handler = logging.FileHandler(log_file, encoding='utf-8')
+        handlers.append(file_handler)
         
     logging.basicConfig(
         level=log_config.get('level', 'INFO'),
