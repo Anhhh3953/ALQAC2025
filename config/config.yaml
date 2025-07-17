@@ -3,7 +3,7 @@ paths:
   # Input data
   law_corpus: "data/alqac25_law.json"
   train_data: "data/alqac25_train.json"
-  test_data: "data/alqac25_private_test.json" # Sửa tên file test cho đúng
+  test_data: "data/alqac25_private_test_Task_1.json" 
   stopwords: "data/stopwords.txt"
   
   # Artifacts (các model/chỉ mục đã được build)
@@ -42,18 +42,18 @@ logging:
 # 5. SUBMISSION PROFILES
 # Cho phép tạo nhiều file submission với các cài đặt khác nhau
 submission_profiles:
-  hybrid_optimal:
+  hybrid_best:
     method: "hybrid"
-    threshold: 1 # Cập nhật sau khi chạy evaluate.py
-    output_file: "output/submission_hybrid_t1.json"
+    threshold: 1
+    output_file: "output/submission_1_hybrid_best.json"
     
-  rerank_optimal:
-    method: "rerank"
-    threshold: 1 # Cập nhật sau khi chạy evaluate.py
-    output_file: "output/submission_rerank_t1.json"
+  hybrid_recall_boost:
+    method: "hybrid"
+    threshold: 3
+    output_file: "output/submission_2_hybrid_recall.json"
     
-  rerank_recall:
+  rerank_backup:
     method: "rerank"
-    threshold: 3 # Cập nhật sau khi chạy evaluate.py
-    output_file: "output/submission_rerank_t3.json"
+    threshold: 2
+    output_file: "output/submission_3_rerank_backup.json"
 
