@@ -70,7 +70,7 @@ class BM25Retriever:
             logging.error(msg)
             raise RuntimeError(msg)
         
-        tokenized_query = self.preprocessor.preprocess(query)
+        tokenized_query = self.preprocessor.process(query)
         
         # get_top_n trả về list các document, không phải index.
         # Chúng ta cần dùng get_scores để lấy index hoặc một cách tiếp cận khác.

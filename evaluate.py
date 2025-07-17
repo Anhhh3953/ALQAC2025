@@ -1,5 +1,5 @@
 # evaluate.py
-
+import os
 import yaml
 import logging
 import argparse
@@ -20,13 +20,20 @@ def setup_logging(config):
     """Cấu hình logging dựa trên file config."""
     log_config = config.get('logging', {})
     log_file = config.get('paths', {}).get('log_file')
+    
     handlers = [logging.StreamHandler()] # Luôn in ra console
+    
     if log_file:
+        # Tạo thư mục cha nếu nó chưa tồn tại
+        log_dir = os.path.dirname(log_file)
+        os.makedirs(log_dir, exist_ok=True)
+        
+        # Thêm FileHandler
         handlers.append(logging.FileHandler(log_file))
         
     logging.basicConfig(
         level=log_config.get('level', 'INFO'),
-        format=log_config.get('format', '%(asctime)s - %(levelname)s - %(message)s'),
+        format=log_config.get('format', '%(asctime)s [%(levelname)s] - %(name)s - %(message)s'),
         handlers=handlers
     )
 
