@@ -18,8 +18,8 @@ paths:
 
 # 2. MODEL CONFIGURATIONS
 models:
-  bi_encoder: "huyydangg/DEk21_hcmute_embedding"
-  cross_encoder: "vinai/phobert-base"
+  bi_encoder: "AITeamVN/Vietnamese_Embedding"
+  cross_encoder: "namdp-ptit/ViRanker"
 
 # 3. PIPELINE PARAMETERS
 # Các siêu tham số cho quá trình retrieval và ranking
@@ -42,18 +42,18 @@ logging:
 # 5. SUBMISSION PROFILES
 # Cho phép tạo nhiều file submission với các cài đặt khác nhau
 submission_profiles:
-  hybrid_best:
-    method: "hybrid"
+  rerank_best:
+    method: "rerank"
     threshold: 1
-    output_file: "output/submission_1_hybrid_best.json"
+    output_file: "output/submission_1_ranker_best.json"
     
   hybrid_recall_boost:
     method: "hybrid"
-    threshold: 3
+    threshold: 2
     output_file: "output/submission_2_hybrid_recall.json"
     
   rerank_backup:
     method: "rerank"
-    threshold: 2
+    threshold: 1
     output_file: "output/submission_3_rerank_backup.json"
 

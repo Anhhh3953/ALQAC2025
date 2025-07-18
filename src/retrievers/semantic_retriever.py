@@ -38,7 +38,7 @@ class SemanticRetriever:
         embeddings = self.encoder.encode(
             full_texts,
             show_progress_bar=True,
-            batch_size=128,  # Có thể điều chỉnh batch size tùy thuộc vào VRAM của GPU
+            batch_size=20,  # Có thể điều chỉnh batch size tùy thuộc vào VRAM của GPU
             convert_to_numpy=True
         )
         
