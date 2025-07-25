@@ -25,14 +25,15 @@ models:
 # Các siêu tham số cho quá trình retrieval và ranking
 pipeline_params:
   # Số lượng ứng viên lấy ra từ mỗi retriever ban đầu
-  retrieval_top_k: 100
+  # retrieval_top_k: 100
   
   # Số lượng ứng viên tốt nhất sau khi fusion để đưa vào Re-ranker
-  rerank_top_k: 50
+  # rerank_top_k: 50
   
   # Ngưỡng cuối cùng sẽ được định nghĩa trong submission_profiles
   # final_top_n: 5 # Không cần ở đây nữa
-
+  retrieval_top_k: 10
+  rerank_top_k: 10
 
 # 4. LOGGING CONFIGURATION
 logging:
@@ -42,18 +43,27 @@ logging:
 # 5. SUBMISSION PROFILES
 # Cho phép tạo nhiều file submission với các cài đặt khác nhau
 submission_profiles:
-  rerank_best:
-    method: "rerank"
-    threshold: 1
-    output_file: "output/submission_1_ranker_best.json"
+  # rerank_best:
+  #   method: "rerank"
+  #   threshold: 1
+  #   output_file: "output/submission_1_ranker_best.json"
     
-  hybrid_recall_boost:
-    method: "hybrid"
-    threshold: 2
-    output_file: "output/submission_2_hybrid_recall.json"
+  # hybrid_recall_boost:
+  #   method: "hybrid"
+  #   threshold: 2
+  #   output_file: "output/submission_2_hybrid_recall.json"
     
-  rerank_backup:
+  # rerank_backup:
+  #   method: "rerank"
+  #   threshold: 1
+  #   output_file: "output/submission_3_rerank_backup.json"
+  rerank_optimal:
     method: "rerank"
-    threshold: 1
-    output_file: "output/submission_3_rerank_backup.json"
+    threshold: 3
+    output_file: "/kaggle/working/submission_task2.json"
 
+llm_params:
+  n_gpu_layers: -1
+  n_ctx: 4096
+  max_tokens: 150
+  temperature: 0.1

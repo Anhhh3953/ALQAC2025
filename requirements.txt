@@ -1,3 +1,4 @@
+# requirements.txt
 faiss-cpu==1.7.4
 numpy==1.24.4
 pandas==2.2.2
@@ -8,3 +9,7 @@ sentence-transformers==2.2.2
 torch==2.2.2
 tqdm==4.66.4
 PyYAML==6.0.1
+# --- Thêm các thư viện sau ---
+langchain
+langchain-community
+llama-cpp-python
